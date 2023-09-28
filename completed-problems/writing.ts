@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import type { User } from "@prisma/client";
+import type { User, Song, Album } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -52,4 +52,19 @@ console.log(user2);
 user2 = await createUserOrConnect("Aidan Sunbury", "aidansunbury@gmail.com");
 console.log(user2);
 
-// 3. Update
+// 3. Update given an album and a new song, add the song to the album
+async function addSongToAlbum(album: Album, song: Song): Promise<Album> {
+  const updatedAlbum = await prisma.album.update({
+    where: {
+      id: album.id,
+    },
+    data: {
+      songs: {
+        connect: {
+          id: song.id,
+        },
+      },
+    },
+  });
+  return updatedAlbum;
+}
