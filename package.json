@@ -9,6 +9,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.1.0",
     "@types/es6-promise": "^3.3.0"
   }
 }
