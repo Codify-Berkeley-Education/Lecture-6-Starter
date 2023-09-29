@@ -41,30 +41,35 @@ export async function createUserOrConnect(
 }
 
 // We can now run this command twice without error
-let user2: User = await createUserOrConnect("Aidan", "aidansunbury@gmail.com");
-console.log(user2);
+// let user2: User = await createUserOrConnect("Aidan", "aidansunbury@gmail.com");
+// console.log(user2);
 
-// Run the command again the exact same way, and we will not error
-user2 = await createUserOrConnect("Aidan", "aidansunbury@gmail.com");
-console.log(user2);
+// // Run the command again the exact same way, and we will not error
+// user2 = await createUserOrConnect("Aidan", "aidansunbury@gmail.com");
+// console.log(user2);
 
-// Run the command a third time with an updated name, and we will update the user
-user2 = await createUserOrConnect("Aidan Sunbury", "aidansunbury@gmail.com");
-console.log(user2);
+// // Run the command a third time with an updated name, and we will update the user
+// user2 = await createUserOrConnect("Aidan Sunbury", "aidansunbury@gmail.com");
+// console.log(user2);
 
-// 3. Update given an album and a new song, add the song to the album
-async function addSongToAlbum(album: Album, song: Song): Promise<Album> {
-  const updatedAlbum = await prisma.album.update({
-    where: {
-      id: album.id,
-    },
+// 3. Update given an album and a song title, create a new song in the album
+// make sure that the artistId of the song matches the artistId of the album
+async function addSongToAlbum(album: Album, songTitle: string): Promise<Song> {
+  const updatedSong = await prisma.song.create({
     data: {
-      songs: {
-        connect: {
-          id: song.id,
-        },
-      },
+      title: songTitle,
+      artistId: album.artistId,
+      albumId: album.id,
     },
   });
-  return updatedAlbum;
+  // The updated song will automatically have the relation defined because we used the appropriate albumId and artistId
+  return updatedSong;
 }
+
+prisma.album.findFirst().then((album) => {
+  if (album) {
+    addSongToAlbum(album, "New Song").then((song) => {
+      console.log(song);
+    });
+  }
+});

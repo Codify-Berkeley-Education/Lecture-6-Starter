@@ -3,6 +3,15 @@ import type { User, Song, Album, Artist } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+// 0. Find the first 10 songs
+
+export async function findAllSongs(): Promise<Song[]> {
+  const songs = await prisma.song.findMany({
+    take: 10,
+  });
+  return songs;
+}
+
 // 1. Find a song by a given name, and return it
 export async function findSongByName(title: string): Promise<Song | null> {
   const song = await prisma.song.findFirst({
