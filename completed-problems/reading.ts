@@ -12,6 +12,7 @@ export async function findSongByName(title: string): Promise<Song | null> {
   });
   return song;
 }
+findSongByName("Pony Time").then((song) => console.log(song));
 
 // 2. Find all songs by a given artist, and return them, given the artist id
 export async function findSongsByArtist(artistId: number): Promise<Song[]> {
